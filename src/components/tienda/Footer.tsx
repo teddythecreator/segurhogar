@@ -22,9 +22,10 @@ export function Footer() {
             <h3 className="font-semibold mb-3">Productos</h3>
             <ul className="space-y-2 text-sm text-gray-400">
               <li><Link to="/catalogo" className="hover:text-white transition-colors">Ver catálogo</Link></li>
-              <li><Link to="/catalogo" className="hover:text-white transition-colors">Cámaras</Link></li>
-              <li><Link to="/catalogo" className="hover:text-white transition-colors">Alarmas</Link></li>
-              <li><Link to="/catalogo" className="hover:text-white transition-colors">Cerraduras</Link></li>
+              <li><Link to="/catalogo?categoria=camaras" className="hover:text-white transition-colors">Cámaras</Link></li>
+              <li><Link to="/catalogo?categoria=alarmas" className="hover:text-white transition-colors">Alarmas</Link></li>
+              <li><Link to="/catalogo?categoria=cerraduras" className="hover:text-white transition-colors">Cerraduras</Link></li>
+              <li><Link to="/catalogo?perfil=mayor" className="hover:text-white transition-colors">Para personas mayores</Link></li>
             </ul>
           </div>
 
@@ -32,9 +33,10 @@ export function Footer() {
           <div>
             <h3 className="font-semibold mb-3">Servicios</h3>
             <ul className="space-y-2 text-sm text-gray-400">
-              <li><Link to="/catalogo" className="hover:text-white transition-colors">Instalación a domicilio</Link></li>
-              <li><Link to="/catalogo" className="hover:text-white transition-colors">Packs completos</Link></li>
-              <li><Link to="/catalogo" className="hover:text-white transition-colors">Ciberseguridad</Link></li>
+              <li><Link to="/packs" className="hover:text-white transition-colors">Packs completos</Link></li>
+              <li><Link to="/comprobar-zona" className="hover:text-white transition-colors">Comprobar zona</Link></li>
+              <li><Link to="/catalogo?tipo=servicio" className="hover:text-white transition-colors">Instalación a domicilio</Link></li>
+              <li><Link to="/catalogo?categoria=ciberseguridad" className="hover:text-white transition-colors">Ciberseguridad</Link></li>
             </ul>
           </div>
 

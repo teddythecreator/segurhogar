@@ -6,6 +6,8 @@ import { HomePage } from '@/pages/tienda/HomePage';
 import { CatalogPage } from '@/pages/tienda/CatalogPage';
 import { ProductPage } from '@/pages/tienda/ProductPage';
 import { CartPage } from '@/pages/tienda/CartPage';
+import { PacksPage } from '@/pages/tienda/PacksPage';
+import { ZoneCheckerPage } from '@/pages/tienda/ZoneCheckerPage';
 import { MyAccountPage } from '@/pages/tienda/MyAccountPage';
 import { LoginPage } from '@/pages/auth/LoginPage';
 import { RegisterPage } from '@/pages/auth/RegisterPage';
@@ -71,6 +73,8 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/catalogo" element={<CatalogPage />} />
           <Route path="/producto/:slug" element={<ProductPage />} />
+          <Route path="/packs" element={<PacksPage />} />
+          <Route path="/comprobar-zona" element={<ZoneCheckerPage />} />
           <Route path="/carrito" element={<CartPage />} />
 
           {/* Mi cuenta (solo clientes) */}

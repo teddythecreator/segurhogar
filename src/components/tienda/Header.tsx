@@ -14,6 +14,8 @@ export function Header() {
   const navLinks = [
     { href: '/', label: 'Inicio' },
     { href: '/catalogo', label: 'Catálogo' },
+    { href: '/packs', label: 'Packs' },
+    { href: '/comprobar-zona', label: 'Zonas' },
     { href: '/carrito', label: 'Carrito' },
   ];
 
