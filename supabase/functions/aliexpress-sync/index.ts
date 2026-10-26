@@ -1,5 +1,6 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { getSecret } from '../_shared/vault.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -154,8 +155,14 @@ serve(async (req) => {
 
   const supabaseUrl = Deno.env.get('SUPABASE_URL')!
   const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
-  const appKey = Deno.env.get('ALIEXPRESS_APP_KEY')!
-  const appSecret = Deno.env.get('ALIEXPRESS_APP_SECRET')!
+
+  // Leer credenciales de AliExpress desde Vault
+  const appKey = await getSecret('aliexpress_app_key')
+  const appSecret = await getSecret('aliexpress_app_secret')
+  
+  if (!appKey || !appSecret) {
+    throw new Error('Credenciales de AliExpress no configuradas')
+  }
 
   const supabase = createClient(supabaseUrl, supabaseServiceKey)
 

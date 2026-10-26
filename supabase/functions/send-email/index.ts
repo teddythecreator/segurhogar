@@ -1,6 +1,7 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { Resend } from 'https://esm.sh/resend@2.1.0'
+import { getSecret } from '../_shared/vault.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -59,7 +60,11 @@ serve(async (req) => {
     }
 
     // 5. Inicializar Resend
-    const resend = new Resend(Deno.env.get('RESEND_API_KEY'))
+    const resendApiKey = await getSecret('resend_api_key')
+    if (!resendApiKey) {
+      throw new Error('Clave API de Resend no configurada')
+    }
+    const resend = new Resend(resendApiKey)
 
     // 6. Preparar contenido del email según el evento
     const { subject, html } = getEmailContent(event, order)

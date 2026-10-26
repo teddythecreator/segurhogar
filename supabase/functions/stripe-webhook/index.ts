@@ -1,12 +1,7 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import Stripe from 'https://esm.sh/stripe@13.11.0?target=deno'
-
-const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') ?? '', {
-  apiVersion: '2023-08-16',
-})
-
-const webhookSecret = Deno.env.get('STRIPE_WEBHOOK_SECRET') ?? ''
+import { getSecret } from '../_shared/vault.ts'
 
 serve(async (req) => {
   const signature = req.headers.get('stripe-signature')
@@ -16,6 +11,35 @@ serve(async (req) => {
 
   const body = await req.text()
 
+  // Crear cliente con service_role_key para leer configuración
+  const supabaseAdmin = createClient(
+    Deno.env.get('SUPABASE_URL') ?? '',
+    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
+    { auth: { autoRefreshToken: false, persistSession: false } }
+  )
+
+  // Leer modo de Stripe desde la tabla integrations
+  const { data: integrationConfig } = await supabaseAdmin
+    .from('integrations')
+    .select('mode')
+    .eq('service', 'stripe')
+    .single()
+  
+  const stripeMode = integrationConfig?.mode || 'prueba'
+  
+  // Leer claves desde Vault
+  const stripeSecretKey = await getSecret(`stripe_secret_key_${stripeMode}`)
+  const webhookSecret = await getSecret(`stripe_webhook_secret_${stripeMode}`)
+  
+  if (!stripeSecretKey || !webhookSecret) {
+    console.error('Stripe keys not configured in Vault')
+    return new Response('Integration not configured', { status: 500 })
+  }
+
+  const stripe = new Stripe(stripeSecretKey, {
+    apiVersion: '2023-08-16',
+  })
+
   let event: Stripe.Event
   try {
     event = stripe.webhooks.constructEvent(body, signature, webhookSecret)
@@ -23,13 +47,6 @@ serve(async (req) => {
     console.error('Webhook signature verification failed:', err.message)
     return new Response('Invalid signature', { status: 400 })
   }
-
-  // Crear cliente con service_role_key para operaciones de admin
-  const supabaseAdmin = createClient(
-    Deno.env.get('SUPABASE_URL') ?? '',
-    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
-    { auth: { autoRefreshToken: false, persistSession: false } }
-  )
 
   // Manejar eventos de Stripe
   switch (event.type) {

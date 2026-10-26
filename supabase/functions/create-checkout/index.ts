@@ -1,6 +1,7 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import Stripe from 'https://esm.sh/stripe@13.11.0?target=deno'
+import { getSecret } from '../_shared/vault.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -166,7 +167,21 @@ serve(async (req) => {
     }])
 
     // 9. Crear sesión de Stripe Checkout
-    const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') ?? '', {
+    // Leer modo de la tabla integrations (por defecto: prueba)
+    const { data: integrationConfig } = await supabaseClient
+      .from('integrations')
+      .select('mode')
+      .eq('service', 'stripe')
+      .single()
+    
+    const stripeMode = integrationConfig?.mode || 'prueba'
+    const stripeSecretKey = await getSecret(`stripe_secret_key_${stripeMode}`)
+    
+    if (!stripeSecretKey) {
+      throw new Error('Clave secreta de Stripe no configurada')
+    }
+    
+    const stripe = new Stripe(stripeSecretKey, {
       apiVersion: '2023-08-16',
     })
 
