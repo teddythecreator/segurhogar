@@ -220,6 +220,8 @@ export interface Installation {
   firma_url: string | null;
   notas: string | null;
   notas_instalador: string | null;
+  fecha_llegada: string | null;
+  fecha_realizacion: string | null;
   created_at: string;
   updated_at: string;
   // Relaciones

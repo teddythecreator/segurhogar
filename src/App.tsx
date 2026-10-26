@@ -21,6 +21,8 @@ import { MyAgendaPage } from '@/pages/panel/MyAgendaPage';
 import { OrdersPage } from '@/pages/panel/OrdersPage';
 import { OrderDetailPage } from '@/pages/panel/OrderDetailPage';
 import { InstallationsPage } from '@/pages/panel/InstallationsPage';
+import { InstallationDetailPage } from '@/pages/panel/InstallationDetailPage';
+import { NewInstallationPage } from '@/pages/panel/NewInstallationPage';
 import { ProductsPage } from '@/pages/panel/ProductsPage';
 import { ProductNewPage } from '@/pages/panel/ProductNewPage';
 import { ProductEditPage } from '@/pages/panel/ProductEditPage';
@@ -157,6 +159,22 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={['admin', 'gestor']}>
                 <InstallationsPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="instalaciones/nueva" 
+            element={
+              <ProtectedRoute allowedRoles={['admin', 'gestor']}>
+                <NewInstallationPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="instalaciones/:id" 
+            element={
+              <ProtectedRoute allowedRoles={['admin', 'gestor']}>
+                <InstallationDetailPage />
               </ProtectedRoute>
             } 
           />
