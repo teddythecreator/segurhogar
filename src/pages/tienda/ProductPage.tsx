@@ -66,7 +66,7 @@ export function ProductPage() {
   );
 
   const handleAffiliateClick = () => {
-    trackClick.mutate({ productId: product.id });
+    trackClick.mutate(product.id);
     // La navegación se hace con el enlace <a>
   };
 
