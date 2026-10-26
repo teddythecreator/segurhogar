@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Shield, Mail, Lock, AlertCircle, CheckCircle } from 'lucide-react';
+import { Shield, Mail, Lock, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Card, CardContent } from '@/components/ui/Card';
@@ -30,21 +30,41 @@ export function LoginPage() {
     setError('');
     setIsLoading(true);
 
+    // MODO DEMO: Autenticación simulada
+    const { demoUsers } = await import('@/data/demo');
+    const demoUser = demoUsers.find(
+      (u) => u.email === data.email && data.password === 'demo1234'
+    );
+
+    if (demoUser) {
+      // Login exitoso en modo demo
+      const { useAuthStore } = await import('@/stores/auth-store');
+      useAuthStore.getState().setUser(demoUser);
+      
+      setIsLoading(false);
+      
+      // Redirigir según el rol
+      if (redirectTo) {
+        navigate(redirectTo);
+      } else {
+        navigate('/auth/redirect');
+      }
+      return;
+    }
+
+    // Si no es demo, intentar con Supabase
     const { error } = await signIn(data.email, data.password);
 
     if (error) {
-      setError('Email o contraseña incorrectos');
+      setError('Email o contraseña incorrectos. En modo demo usa: admin@segurhogar.es / demo1234');
       setIsLoading(false);
       return;
     }
 
     // Redirigir según el rol del usuario
-    // El useAuth hook detectará el cambio de sesión y actualizará el estado
-    // Luego redirigimos según el rol
     if (redirectTo) {
       navigate(redirectTo);
     } else {
-      // Redirigir a una página temporal que decidirá según el rol
       navigate('/auth/redirect');
     }
   };
@@ -114,16 +134,14 @@ export function LoginPage() {
             </p>
           </div>
 
-          <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-            <div className="flex items-start gap-2">
-              <CheckCircle className="h-4 w-4 text-[#2D7FF9] mt-0.5 shrink-0" />
-              <div className="text-xs text-gray-600">
-                <p className="font-medium mb-1">Primer acceso como admin:</p>
-                <p>Regístrate y luego ejecuta en Supabase SQL Editor:</p>
-                <code className="block mt-1 p-2 bg-white rounded text-[10px] font-mono">
-                  UPDATE profiles SET role = 'admin' WHERE email = 'tu@email.com';
-                </code>
-              </div>
+          {/* Credenciales Demo */}
+          <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <p className="text-xs font-semibold text-blue-900 mb-2">🎮 MODO DEMO - Credenciales de prueba:</p>
+            <div className="space-y-1 text-xs text-blue-800">
+              <p><strong>Admin:</strong> admin@segurhogar.es / demo1234</p>
+              <p><strong>Gestor:</strong> gestor@segurhogar.es / demo1234</p>
+              <p><strong>Instalador:</strong> instalador@segurhogar.es / demo1234</p>
+              <p><strong>Cliente:</strong> cliente@segurhogar.es / demo1234</p>
             </div>
           </div>
         </CardContent>

@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
+import { useAuthStore } from '@/stores/auth-store';
 import type { Profile, UserRole } from '@/types/database';
 import type { User } from '@supabase/supabase-js';
 
@@ -18,9 +19,7 @@ interface UseAuthReturn {
 }
 
 export function useAuth(): UseAuthReturn {
-  const [user, setUser] = useState<Profile | null>(null);
-  const [authUser, setAuthUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const { user, setUser, isAuthenticated, logout } = useAuthStore();
 
   // Cargar el profile desde Supabase
   const loadProfile = async (userId: string): Promise<Profile | null> => {
@@ -52,40 +51,34 @@ export function useAuth(): UseAuthReturn {
     }
   };
 
-  // Inicializar: escuchar cambios de auth
+  // Inicializar: escuchar cambios de auth de Supabase
   useEffect(() => {
-    // Obtener sesión actual
+    // Verificar si hay usuario en el store (modo demo)
+    if (user) {
+      return;
+    }
+
+    // Obtener sesión actual de Supabase
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setAuthUser(session?.user ?? null);
       if (session?.user) {
         loadProfile(session.user.id).then((profile) => {
-          setUser(profile);
-          setIsLoading(false);
+          if (profile) {
+            setUser(profile);
+          }
         });
-      } else {
-        setUser(null);
-        setIsLoading(false);
       }
     });
 
     // Escuchar cambios de auth
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        setAuthUser(session?.user ?? null);
-
         if (event === 'SIGNED_IN' && session?.user) {
           const profile = await loadProfile(session.user.id);
-          setUser(profile);
-          setIsLoading(false);
+          if (profile) {
+            setUser(profile);
+          }
         } else if (event === 'SIGNED_OUT') {
-          setUser(null);
-          setIsLoading(false);
-        } else if (event === 'TOKEN_REFRESHED' && session?.user) {
-          const profile = await loadProfile(session.user.id);
-          setUser(profile);
-        } else if (event === 'USER_UPDATED' && session?.user) {
-          const profile = await loadProfile(session.user.id);
-          setUser(profile);
+          logout();
         }
       }
     );
@@ -93,31 +86,27 @@ export function useAuth(): UseAuthReturn {
     return () => subscription.unsubscribe();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Sign in
+  // Sign in (Supabase)
   const signIn = async (email: string, password: string) => {
     try {
-      setIsLoading(true);
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
       if (error) {
-        setIsLoading(false);
         return { error };
       }
 
       return { error: null };
     } catch (err) {
-      setIsLoading(false);
       return { error: err as Error };
     }
   };
 
-  // Sign up
+  // Sign up (Supabase)
   const signUp = async (email: string, password: string, nombre: string) => {
     try {
-      setIsLoading(true);
       const { error } = await supabase.auth.signUp({
         email,
         password,
@@ -129,13 +118,11 @@ export function useAuth(): UseAuthReturn {
       });
 
       if (error) {
-        setIsLoading(false);
         return { error };
       }
 
       return { error: null };
     } catch (err) {
-      setIsLoading(false);
       return { error: err as Error };
     }
   };
@@ -143,19 +130,21 @@ export function useAuth(): UseAuthReturn {
   // Sign out
   const signOut = async () => {
     try {
+      // Intentar cerrar sesión en Supabase (puede fallar si no hay sesión)
       await supabase.auth.signOut();
-      setUser(null);
-      setAuthUser(null);
     } catch (err) {
-      console.error('Error cerrando sesión:', err);
+      console.error('Error cerrando sesión en Supabase:', err);
+    } finally {
+      // Siempre limpiar el store
+      logout();
     }
   };
 
-  // Reset password
+  // Reset password (Supabase)
   const resetPassword = async (email: string) => {
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/nueva-contrasena`,
+        redirectTo: `${window.location.origin}/recuperar-contrasena`,
       });
 
       if (error) {
@@ -168,7 +157,7 @@ export function useAuth(): UseAuthReturn {
     }
   };
 
-  // Update password
+  // Update password (Supabase)
   const updatePassword = async (newPassword: string) => {
     try {
       const { error } = await supabase.auth.updateUser({
@@ -187,9 +176,9 @@ export function useAuth(): UseAuthReturn {
 
   return {
     user,
-    authUser,
-    isLoading,
-    isAuthenticated: !!user,
+    authUser: null, // No usamos authUser en modo demo
+    isLoading: false, // En modo demo no hay loading
+    isAuthenticated,
     role: user?.role ?? null,
     signIn,
     signUp,
