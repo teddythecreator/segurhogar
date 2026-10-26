@@ -19,6 +19,7 @@ import { NewPasswordPage } from '@/pages/auth/NewPasswordPage';
 import { DashboardPage } from '@/pages/panel/DashboardPage';
 import { MyAgendaPage } from '@/pages/panel/MyAgendaPage';
 import { OrdersPage } from '@/pages/panel/OrdersPage';
+import { OrderDetailPage } from '@/pages/panel/OrderDetailPage';
 import { InstallationsPage } from '@/pages/panel/InstallationsPage';
 import { ProductsPage } from '@/pages/panel/ProductsPage';
 import { ProductNewPage } from '@/pages/panel/ProductNewPage';
@@ -138,6 +139,14 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={['admin', 'gestor']}>
                 <OrdersPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="pedidos/:id" 
+            element={
+              <ProtectedRoute allowedRoles={['admin', 'gestor']}>
+                <OrderDetailPage />
               </ProtectedRoute>
             } 
           />
