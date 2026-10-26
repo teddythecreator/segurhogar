@@ -13,7 +13,15 @@ import { RecoverPasswordPage } from '@/pages/auth/RecoverPasswordPage';
 import { NewPasswordPage } from '@/pages/auth/NewPasswordPage';
 import { DashboardPage } from '@/pages/panel/DashboardPage';
 import { MyAgendaPage } from '@/pages/panel/MyAgendaPage';
-import { PlaceholderPage } from '@/pages/panel/PlaceholderPage';
+import { OrdersPage } from '@/pages/panel/OrdersPage';
+import { InstallationsPage } from '@/pages/panel/InstallationsPage';
+import { ProductsPage } from '@/pages/panel/ProductsPage';
+import { CustomersPage } from '@/pages/panel/CustomersPage';
+import { QuotesPage } from '@/pages/panel/QuotesPage';
+import { AffiliatePage } from '@/pages/panel/AffiliatePage';
+import { ReportsPage } from '@/pages/panel/ReportsPage';
+import { UsersPage } from '@/pages/panel/UsersPage';
+import { SettingsPage } from '@/pages/panel/SettingsPage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 import { useAuth } from '@/hooks/useAuth';
 import { useEffect } from 'react';
@@ -82,7 +90,7 @@ function App() {
         {/* Redirección después del login según rol */}
         <Route path="/auth/redirect" element={<AuthRedirect />} />
 
-        {/* Panel protegido (admin, gestor, instalador) */}
+        {/* Panel protegido */}
         <Route
           path="/panel"
           element={
@@ -91,13 +99,115 @@ function App() {
             </ProtectedRoute>
           }
         >
-          <Route index element={<DashboardPage />} />
-          <Route path="mi-agenda" element={<MyAgendaPage />} />
-          <Route path="pedidos" element={<PlaceholderPage title="Pedidos" description="Gestión de pedidos de clientes" />} />
-          <Route path="instalaciones" element={<PlaceholderPage title="Instalaciones" description="Calendario de instalaciones a domicilio" />} />
-          <Route path="productos" element={<PlaceholderPage title="Productos" description="Gestión del catálogo de productos" />} />
-          <Route path="usuarios" element={<PlaceholderPage title="Usuarios" description="Gestión de usuarios y roles" />} />
-          <Route path="asistentes" element={<PlaceholderPage title="Asistentes IA" description="Configuración de asistentes de IA" />} />
+          {/* Dashboard (admin y gestor) */}
+          <Route 
+            index 
+            element={
+              <ProtectedRoute allowedRoles={['admin', 'gestor']}>
+                <DashboardPage />
+              </ProtectedRoute>
+            } 
+          />
+          
+          {/* Mi agenda (instalador) */}
+          <Route 
+            path="mi-agenda" 
+            element={
+              <ProtectedRoute allowedRoles={['instalador']}>
+                <MyAgendaPage />
+              </ProtectedRoute>
+            } 
+          />
+          
+          {/* Pedidos (admin y gestor) */}
+          <Route 
+            path="pedidos" 
+            element={
+              <ProtectedRoute allowedRoles={['admin', 'gestor']}>
+                <OrdersPage />
+              </ProtectedRoute>
+            } 
+          />
+          
+          {/* Instalaciones (admin y gestor) */}
+          <Route 
+            path="instalaciones" 
+            element={
+              <ProtectedRoute allowedRoles={['admin', 'gestor']}>
+                <InstallationsPage />
+              </ProtectedRoute>
+            } 
+          />
+          
+          {/* Productos (solo admin) */}
+          <Route 
+            path="productos" 
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <ProductsPage />
+              </ProtectedRoute>
+            } 
+          />
+          
+          {/* Clientes (admin y gestor) */}
+          <Route 
+            path="clientes" 
+            element={
+              <ProtectedRoute allowedRoles={['admin', 'gestor']}>
+                <CustomersPage />
+              </ProtectedRoute>
+            } 
+          />
+          
+          {/* Presupuestos (admin y gestor) */}
+          <Route 
+            path="presupuestos" 
+            element={
+              <ProtectedRoute allowedRoles={['admin', 'gestor']}>
+                <QuotesPage />
+              </ProtectedRoute>
+            } 
+          />
+          
+          {/* Afiliación (solo admin) */}
+          <Route 
+            path="afiliacion" 
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <AffiliatePage />
+              </ProtectedRoute>
+            } 
+          />
+          
+          {/* Informes (solo admin) */}
+          <Route 
+            path="informes" 
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <ReportsPage />
+              </ProtectedRoute>
+            } 
+          />
+          
+          {/* Usuarios (solo admin) */}
+          <Route 
+            path="usuarios" 
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <UsersPage />
+              </ProtectedRoute>
+            } 
+          />
+          
+          {/* Ajustes (solo admin) */}
+          <Route 
+            path="ajustes" 
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <SettingsPage />
+              </ProtectedRoute>
+            } 
+          />
         </Route>
 
         {/* 404 */}

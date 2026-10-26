@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Package, Calendar, Users, LogOut, Shield, Menu, X, MessageSquare } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { LogOut, Shield, Menu, X } from 'lucide-react';
+import { Sidebar } from './Sidebar';
 import { useAuth } from '@/hooks/useAuth';
 
 export function PanelLayout() {
@@ -15,15 +15,6 @@ export function PanelLayout() {
     navigate('/login');
   };
 
-  const navItems = [
-    { href: '/panel', icon: LayoutDashboard, label: 'Dashboard' },
-    { href: '/panel/pedidos', icon: Package, label: 'Pedidos' },
-    { href: '/panel/installaciones', icon: Calendar, label: 'Instalaciones' },
-    { href: '/panel/productos', icon: Package, label: 'Productos' },
-    { href: '/panel/usuarios', icon: Users, label: 'Usuarios' },
-    { href: '/panel/asistentes', icon: MessageSquare, label: 'Asistentes IA' },
-  ];
-
   return (
     <div className="min-h-screen bg-gray-50 flex">
       {/* Sidebar Desktop */}
@@ -36,23 +27,9 @@ export function PanelLayout() {
           <p className="text-xs text-gray-400 mt-1">Panel de gestión</p>
         </div>
 
-        <nav className="flex-1 p-4 space-y-1">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              to={item.href}
-              className={cn(
-                'flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
-                location.pathname === item.href
-                  ? 'bg-[#2D7FF9] text-white'
-                  : 'text-gray-300 hover:bg-white/10'
-              )}
-            >
-              <item.icon className="h-4 w-4" />
-              {item.label}
-            </Link>
-          ))}
-        </nav>
+        <div className="flex-1 p-4 overflow-y-auto">
+          <Sidebar />
+        </div>
 
         <div className="p-4 border-t border-white/10">
           <div className="flex items-center gap-3 mb-3">
@@ -61,7 +38,7 @@ export function PanelLayout() {
             </div>
             <div className="min-w-0">
               <p className="text-sm font-medium truncate">{user?.nombre || 'Usuario'}</p>
-              <p className="text-xs text-gray-400 truncate">{user?.email || 'usuario@demo.es'}</p>
+              <p className="text-xs text-gray-400 truncate">{user?.email || ''}</p>
             </div>
           </div>
           <button
@@ -85,24 +62,7 @@ export function PanelLayout() {
                 <X className="h-5 w-5" />
               </button>
             </div>
-            <nav className="space-y-1">
-              {navItems.map((item) => (
-                <Link
-                  key={item.href}
-                  to={item.href}
-                  onClick={() => setSidebarOpen(false)}
-                  className={cn(
-                    'flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
-                    location.pathname === item.href
-                      ? 'bg-[#2D7FF9] text-white'
-                      : 'text-gray-300 hover:bg-white/10'
-                  )}
-                >
-                  <item.icon className="h-4 w-4" />
-                  {item.label}
-                </Link>
-              ))}
-            </nav>
+            <Sidebar />
           </aside>
         </div>
       )}
