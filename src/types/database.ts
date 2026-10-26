@@ -106,6 +106,11 @@ export interface Product {
   stock: number;
   duracion_instalacion_min: number | null;
   activo: boolean;
+  // AliExpress
+  aliexpress_product_id: string | null;
+  aliexpress_last_price: number | null;
+  aliexpress_last_sync: string | null;
+  margin_alert_sent: boolean;
   created_at: string;
   updated_at: string;
   // Relaciones

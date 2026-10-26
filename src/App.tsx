@@ -33,6 +33,8 @@ import { CustomersPage } from '@/pages/panel/CustomersPage';
 import { QuotesPage } from '@/pages/panel/QuotesPage';
 import { AffiliatePage } from '@/pages/panel/AffiliatePage';
 import { ReportsPage } from '@/pages/panel/ReportsPage';
+import { AliexpressConfigPage } from '@/pages/panel/AliexpressConfigPage';
+import { ImportAliexpressProductPage } from '@/pages/panel/ImportAliexpressProductPage';
 import { UsersPage } from '@/pages/panel/UsersPage';
 import { SettingsPage } from '@/pages/panel/SettingsPage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
@@ -213,6 +215,24 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={['admin']}>
                 <CategoriesPage />
+              </ProtectedRoute>
+            } 
+          />
+
+          {/* AliExpress (solo admin) */}
+          <Route 
+            path="aliexpress" 
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <AliexpressConfigPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="aliexpress/importar" 
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <ImportAliexpressProductPage />
               </ProtectedRoute>
             } 
           />

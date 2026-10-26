@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Package, User, MapPin, FileText, History, AlertTriangle, Edit3 } from 'lucide-react';
+import { ArrowLeft, Package, User, MapPin, FileText, History, AlertTriangle, Edit3, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
@@ -10,6 +10,7 @@ import { formatPrice, formatDateTime } from '@/lib/utils';
 import { ORDER_STATUS_LABELS } from '@/types/database';
 import type { OrderStatus } from '@/types/database';
 import { GenerateEmailButton } from '@/components/panel/orders/GenerateEmailButton';
+import { useCreateAliexpressOrder, useAliexpressOrders } from '@/hooks/useAliexpress';
 
 export function OrderDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -29,6 +30,11 @@ export function OrderDetailPage() {
   const [incidentDescripcion, setIncidentDescripcion] = useState('');
   const [showReturnForm, setShowReturnForm] = useState(false);
   const [returnMotivo, setReturnMotivo] = useState('');
+  const createAeOrder = useCreateAliexpressOrder();
+  const { data: aeOrders } = useAliexpressOrders();
+  
+  // Verificar si este pedido ya tiene un pedido de AliExpress
+  const existingAeOrder = aeOrders?.find((o: any) => o.order_id === id);
 
   if (isLoading) {
     return (
@@ -456,6 +462,52 @@ export function OrderDetailPage() {
                   >
                     Confirmar devolución
                   </Button>
+                </div>
+              )}
+
+              {/* Enviar a AliExpress */}
+              {order.estado === 'pagado' && !existingAeOrder && (
+                <>
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={async () => {
+                      if (!confirm('¿Enviar este pedido a AliExpress? Se creará el pedido en el proveedor.')) return;
+                      try {
+                        await createAeOrder.mutateAsync(order.id);
+                        alert('Pedido enviado a AliExpress correctamente');
+                      } catch (error) {
+                        alert('Error: ' + (error as Error).message);
+                      }
+                    }}
+                    disabled={createAeOrder.isPending}
+                  >
+                    {createAeOrder.isPending ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Enviando...
+                      </>
+                    ) : (
+                      '📦 Enviar a AliExpress'
+                    )}
+                  </Button>
+                </>
+              )}
+
+              {existingAeOrder && (
+                <div className="p-3 bg-green-50 rounded-lg text-sm">
+                  <p className="font-medium text-green-900">✓ Pedido enviado a AliExpress</p>
+                  <p className="text-green-700 text-xs mt-1">
+                    ID AliExpress: {existingAeOrder.aliexpress_order_id}
+                  </p>
+                  {existingAeOrder.tracking_number && (
+                    <p className="text-green-700 text-xs">
+                      Tracking: {existingAeOrder.tracking_number}
+                    </p>
+                  )}
+                  <p className="text-green-700 text-xs">
+                    Estado: {existingAeOrder.status}
+                  </p>
                 </div>
               )}
             </CardContent>

@@ -55,6 +55,18 @@ const menuItems: MenuItem[] = [
     roles: ['admin'],
   },
   {
+    href: '/panel/aliexpress',
+    label: 'AliExpress',
+    icon: ShoppingBag,
+    roles: ['admin'],
+  },
+  {
+    href: '/panel/aliexpress/importar',
+    label: 'Importar AE',
+    icon: ShoppingBag,
+    roles: ['admin'],
+  },
+  {
     href: '/panel/clientes',
     label: 'Clientes',
     icon: Users,
