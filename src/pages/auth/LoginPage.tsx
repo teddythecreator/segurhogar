@@ -19,8 +19,7 @@ export function LoginPage() {
     setError('');
     setIsLoading(true);
 
-    // Simulación de login (en producción se usaría Supabase Auth)
-    // Para demo, aceptamos ciertos emails de prueba
+    // Simulación de login (en producción se usará Supabase Auth)
     setTimeout(() => {
       const demoUsers: Record<string, { nombre: string; role: 'admin' | 'gestor_pedidos' | 'instalador' }> = {
         'admin@segurhogar.es': { nombre: 'Admin SegurHogar', role: 'admin' },
@@ -32,7 +31,7 @@ export function LoginPage() {
       if (demoUser && password === 'demo1234') {
         setUser({
           id: 'user-' + Date.now(),
-          email: email,
+          email,
           nombre: demoUser.nombre,
           role: demoUser.role,
           creado_en: new Date().toISOString(),

@@ -14,17 +14,17 @@ export function HomePage() {
               Protege lo que más importa
             </h1>
             <p className="text-lg md:text-xl text-gray-300 mb-8">
-              Seguridad física y digital para hogares, personas mayores y pequeños negocios. 
+              Seguridad física y digital para hogares, personas mayores y pequeños negocios.
               Productos seleccionados e instalación profesional a domicilio.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
-              <Link to="/tienda">
+              <Link to="/catalogo">
                 <Button size="lg">
-                  Ver productos
+                  Ver catálogo
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
-              <Link to="/packs">
+              <Link to="/catalogo">
                 <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-[#0B1F3A]">
                   Ver packs
                 </Button>
@@ -34,7 +34,7 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Categorías destacadas */}
+      {/* Categorías */}
       <section className="py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-2xl md:text-3xl font-bold text-[#0B1F3A] text-center mb-10">
@@ -45,25 +45,25 @@ export function HomePage() {
               icon={<Camera className="h-8 w-8" />}
               title="Videovigilancia"
               description="Cámaras WiFi con visión nocturna y alertas al móvil"
-              link="/tienda?cat=camaras"
+              link="/catalogo"
             />
             <CategoryCard
               icon={<Shield className="h-8 w-8" />}
               title="Alarmas"
               description="Sistemas de alarma sin cuotas mensuales"
-              link="/tienda?cat=alarmas"
+              link="/catalogo"
             />
             <CategoryCard
               icon={<Lock className="h-8 w-8" />}
               title="Cerraduras"
               description="Cerraduras inteligentes con huella y app"
-              link="/tienda?cat=cerraduras"
+              link="/catalogo"
             />
             <CategoryCard
               icon={<Wifi className="h-8 w-8" />}
               title="Ciberseguridad"
               description="VPN, antivirus y routers seguros"
-              link="/tienda?cat=routers"
+              link="/catalogo"
             />
           </div>
         </div>
@@ -92,41 +92,6 @@ export function HomePage() {
               description="Nuestro asistente inteligente te ayuda a elegir los productos que mejor se adaptan a ti."
             />
           </div>
-        </div>
-      </section>
-
-      {/* CTA Packs */}
-      <section className="py-12 md:py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-[#0B1F3A] mb-4">
-            Packs todo incluido
-          </h2>
-          <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
-            Productos + instalación profesional a precio cerrado. La forma más fácil de proteger tu hogar o negocio.
-          </p>
-          <Link to="/packs">
-            <Button size="lg">
-              Descubrir packs
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </Link>
-        </div>
-      </section>
-
-      {/* Asistente IA */}
-      <section className="py-12 md:py-16 bg-[#0B1F3A] text-white">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4">
-            ¿No sabes qué necesitas?
-          </h2>
-          <p className="text-gray-300 mb-8 max-w-2xl mx-auto">
-            Nuestro asistente de inteligencia artificial te ayuda a encontrar los productos perfectos para tu situación.
-          </p>
-          <Link to="/asistente-ia">
-            <Button variant="primary" size="lg">
-              Hablar con el asistente
-            </Button>
-          </Link>
         </div>
       </section>
     </div>

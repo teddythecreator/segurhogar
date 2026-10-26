@@ -1,75 +1,42 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { PublicLayout } from '@/components/layout/PublicLayout';
-import { PanelLayout } from '@/components/layout/PanelLayout';
-import { HomePage } from '@/pages/HomePage';
-import { TiendaPage } from '@/pages/TiendaPage';
-import { ProductDetailPage } from '@/pages/ProductDetailPage';
-import { CartPage } from '@/pages/CartPage';
-import { CheckoutPage } from '@/pages/CheckoutPage';
-import { OrderConfirmedPage } from '@/pages/OrderConfirmedPage';
-import { AsistenteIAPage } from '@/pages/AsistenteIAPage';
-import { LoginPage } from '@/pages/LoginPage';
-import { PanelDashboard } from '@/pages/panel/PanelDashboard';
-import { useAuthStore } from '@/stores/auth-store';
-
-// Componente para rutas protegidas
-function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
-  return <>{children}</>;
-}
-
-// Página de packs (redirige a tienda con filtro)
-function PacksPage() {
-  return <Navigate to="/tienda?cat=packs" replace />;
-}
-
-// Página de instalación (redirige a tienda con filtro)
-function InstalacionPage() {
-  return <Navigate to="/tienda?cat=alarmas" replace />;
-}
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { TiendaLayout } from '@/components/tienda/TiendaLayout';
+import { PanelLayout } from '@/components/panel/PanelLayout';
+import { HomePage } from '@/pages/tienda/HomePage';
+import { CatalogPage } from '@/pages/tienda/CatalogPage';
+import { ProductPage } from '@/pages/tienda/ProductPage';
+import { CartPage } from '@/pages/tienda/CartPage';
+import { LoginPage } from '@/pages/auth/LoginPage';
+import { DashboardPage } from '@/pages/panel/DashboardPage';
+import { PlaceholderPage } from '@/pages/panel/PlaceholderPage';
+import { NotFoundPage } from '@/pages/NotFoundPage';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Rutas públicas */}
-        <Route element={<PublicLayout />}>
+        {/* Rutas públicas de la tienda */}
+        <Route element={<TiendaLayout />}>
           <Route path="/" element={<HomePage />} />
-          <Route path="/tienda" element={<TiendaPage />} />
-          <Route path="/producto/:id" element={<ProductDetailPage />} />
+          <Route path="/catalogo" element={<CatalogPage />} />
+          <Route path="/producto/:slug" element={<ProductPage />} />
           <Route path="/carrito" element={<CartPage />} />
-          <Route path="/checkout" element={<CheckoutPage />} />
-          <Route path="/pedido-confirmado" element={<OrderConfirmedPage />} />
-          <Route path="/asistente-ia" element={<AsistenteIAPage />} />
-          <Route path="/packs" element={<PacksPage />} />
-          <Route path="/instalacion" element={<InstalacionPage />} />
         </Route>
 
         {/* Login */}
         <Route path="/login" element={<LoginPage />} />
 
-        {/* Panel protegido */}
-        <Route
-          path="/panel"
-          element={
-            <ProtectedRoute>
-              <PanelLayout />
-            </ProtectedRoute>
-          }
-        >
-          <Route index element={<PanelDashboard />} />
-          <Route path="pedidos" element={<PanelDashboard />} />
-          <Route path="installaciones" element={<PanelDashboard />} />
-          <Route path="productos" element={<PanelDashboard />} />
-          <Route path="usuarios" element={<PanelDashboard />} />
-          <Route path="asistentes" element={<PanelDashboard />} />
+        {/* Panel protegido (la protección se añadirá en pasos posteriores) */}
+        <Route path="/panel" element={<PanelLayout />}>
+          <Route index element={<DashboardPage />} />
+          <Route path="pedidos" element={<PlaceholderPage title="Pedidos" description="Gestión de pedidos de clientes" />} />
+          <Route path="installaciones" element={<PlaceholderPage title="Instalaciones" description="Calendario de instalaciones a domicilio" />} />
+          <Route path="productos" element={<PlaceholderPage title="Productos" description="Gestión del catálogo de productos" />} />
+          <Route path="usuarios" element={<PlaceholderPage title="Usuarios" description="Gestión de usuarios y roles" />} />
+          <Route path="asistentes" element={<PlaceholderPage title="Asistentes IA" description="Configuración de asistentes de IA" />} />
         </Route>
 
         {/* 404 */}
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   );

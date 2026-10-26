@@ -2,7 +2,7 @@ import { Outlet } from 'react-router-dom';
 import { Header } from './Header';
 import { Footer } from './Footer';
 
-export function PublicLayout() {
+export function TiendaLayout() {
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Header />

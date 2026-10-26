@@ -1,23 +1,18 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ShoppingCart, Menu, X, Shield, User } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
-import { useCartStore } from '@/stores/cart-store';
-import { useAuthStore } from '@/stores/auth-store';
+import { ShoppingCart, Menu, X, Shield } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useCartStore } from '@/stores/cart-store';
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
   const totalItems = useCartStore((s) => s.getTotalItems());
-  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
 
   const navLinks = [
     { href: '/', label: 'Inicio' },
-    { href: '/tienda', label: 'Tienda' },
-    { href: '/packs', label: 'Packs' },
-    { href: '/instalacion', label: 'Instalación' },
-    { href: '/asistente-ia', label: 'Asistente IA' },
+    { href: '/catalogo', label: 'Catálogo' },
+    { href: '/carrito', label: 'Carrito' },
   ];
 
   const isActive = (href: string) => location.pathname === href;
@@ -59,25 +54,15 @@ export function Header() {
               )}
             </Link>
 
-            {isAuthenticated ? (
-              <Link to="/panel">
-                <Button variant="ghost" size="sm" className="text-white hover:bg-white/10">
-                  <User className="h-4 w-4 mr-1" />
-                  Panel
-                </Button>
-              </Link>
-            ) : (
-              <Link to="/login">
-                <Button variant="ghost" size="sm" className="text-white hover:bg-white/10">
-                  Acceder
-                </Button>
-              </Link>
-            )}
+            <Link to="/login" className="hidden md:inline-flex text-sm font-medium text-gray-300 hover:text-white transition-colors">
+              Acceder
+            </Link>
 
             {/* Mobile menu button */}
             <button
               className="md:hidden p-2 hover:bg-white/10 rounded-lg"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Abrir menú"
             >
               {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
@@ -86,7 +71,7 @@ export function Header() {
 
         {/* Mobile Nav */}
         {mobileMenuOpen && (
-          <nav className="md:hidden pb-4 border-t border-white/10 pt-4">
+          <nav className="md:hidden pb-4 border-t border-white/10 pt-4 animate-fade-in">
             <div className="flex flex-col gap-2">
               {navLinks.map((link) => (
                 <Link
@@ -103,6 +88,13 @@ export function Header() {
                   {link.label}
                 </Link>
               ))}
+              <Link
+                to="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-3 py-2 rounded-lg text-sm font-medium text-gray-300 hover:bg-white/10"
+              >
+                Acceder
+              </Link>
             </div>
           </nav>
         )}

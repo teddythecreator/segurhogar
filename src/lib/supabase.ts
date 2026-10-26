@@ -1,16 +1,29 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Las variables de entorno se cargan desde .env
-// VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY son públicas (anon key)
-// Las claves secretas (service_role, API keys de Stripe/Claude/Resend)
-// NUNCA van en el frontend. Se usan en Supabase Edge Functions.
+// Variables de entorno públicas (anon key)
+// Las claves secretas (service_role, Stripe, Resend, Claude) NUNCA van aquí.
+// Se usan en Supabase Edge Functions.
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://placeholder.supabase.co';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'placeholder-anon-key';
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.warn(
+    '⚠️ Variables de entorno de Supabase no configuradas. ' +
+    'Copia .env.example a .env y rellena los valores.'
+  );
+}
 
-// Helper para llamar Edge Functions (donde están las claves secretas)
+export const supabase = createClient(
+  supabaseUrl || 'https://placeholder.supabase.co',
+  supabaseAnonKey || 'placeholder-anon-key'
+);
+
+/**
+ * Helper para llamar a Supabase Edge Functions.
+ * Las Edge Functions son el único lugar donde se pueden usar claves secretas
+ * (Stripe, Resend, Claude API, etc.)
+ */
 export async function callEdgeFunction<T>(
   functionName: string,
   body?: Record<string, unknown>

@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Package, Calendar, Users, MessageSquare, LogOut, Shield, Menu, X } from 'lucide-react';
-import { useAuthStore } from '@/stores/auth-store';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { LayoutDashboard, Package, Calendar, Users, LogOut, Shield, Menu, X, MessageSquare } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useAuthStore } from '@/stores/auth-store';
 
 export function PanelLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -13,21 +13,17 @@ export function PanelLayout() {
 
   const handleLogout = () => {
     logout();
-    navigate('/');
+    navigate('/login');
   };
 
   const navItems = [
-    { href: '/panel', icon: LayoutDashboard, label: 'Dashboard', roles: ['admin', 'gestor_pedidos', 'instalador'] },
-    { href: '/panel/pedidos', icon: Package, label: 'Pedidos', roles: ['admin', 'gestor_pedidos'] },
-    { href: '/panel/installaciones', icon: Calendar, label: 'Instalaciones', roles: ['admin', 'instalador'] },
-    { href: '/panel/productos', icon: Package, label: 'Productos', roles: ['admin'] },
-    { href: '/panel/usuarios', icon: Users, label: 'Usuarios', roles: ['admin'] },
-    { href: '/panel/asistentes', icon: MessageSquare, label: 'Asistentes IA', roles: ['admin'] },
+    { href: '/panel', icon: LayoutDashboard, label: 'Dashboard' },
+    { href: '/panel/pedidos', icon: Package, label: 'Pedidos' },
+    { href: '/panel/installaciones', icon: Calendar, label: 'Instalaciones' },
+    { href: '/panel/productos', icon: Package, label: 'Productos' },
+    { href: '/panel/usuarios', icon: Users, label: 'Usuarios' },
+    { href: '/panel/asistentes', icon: MessageSquare, label: 'Asistentes IA' },
   ];
-
-  const visibleItems = navItems.filter((item) =>
-    user ? item.roles.includes(user.role) : false
-  );
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
@@ -42,7 +38,7 @@ export function PanelLayout() {
         </div>
 
         <nav className="flex-1 p-4 space-y-1">
-          {visibleItems.map((item) => (
+          {navItems.map((item) => (
             <Link
               key={item.href}
               to={item.href}
@@ -66,7 +62,7 @@ export function PanelLayout() {
             </div>
             <div className="min-w-0">
               <p className="text-sm font-medium truncate">{user?.nombre || 'Usuario'}</p>
-              <p className="text-xs text-gray-400 truncate">{user?.email || ''}</p>
+              <p className="text-xs text-gray-400 truncate">{user?.email || 'usuario@demo.es'}</p>
             </div>
           </div>
           <button
@@ -86,12 +82,12 @@ export function PanelLayout() {
           <aside className="absolute left-0 top-0 bottom-0 w-64 bg-[#0B1F3A] text-white p-4">
             <div className="flex items-center justify-between mb-6">
               <span className="font-bold">Panel</span>
-              <button onClick={() => setSidebarOpen(false)}>
+              <button onClick={() => setSidebarOpen(false)} aria-label="Cerrar menú">
                 <X className="h-5 w-5" />
               </button>
             </div>
             <nav className="space-y-1">
-              {visibleItems.map((item) => (
+              {navItems.map((item) => (
                 <Link
                   key={item.href}
                   to={item.href}
@@ -114,12 +110,20 @@ export function PanelLayout() {
 
       {/* Main content */}
       <div className="flex-1 flex flex-col min-w-0">
-        {/* Mobile header */}
-        <header className="lg:hidden bg-white border-b px-4 py-3 flex items-center gap-3">
-          <button onClick={() => setSidebarOpen(true)} className="p-1">
-            <Menu className="h-5 w-5" />
-          </button>
-          <span className="font-semibold text-[#0B1F3A]">Panel de gestión</span>
+        {/* Header */}
+        <header className="bg-white border-b px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <button onClick={() => setSidebarOpen(true)} className="lg:hidden p-1" aria-label="Abrir menú">
+              <Menu className="h-5 w-5" />
+            </button>
+            <span className="font-semibold text-[#0B1F3A]">Panel de gestión</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-gray-600 hidden sm:block">{user?.nombre || 'Usuario'}</span>
+            <div className="h-8 w-8 rounded-full bg-[#2D7FF9] flex items-center justify-center text-white text-sm font-bold">
+              {user?.nombre?.charAt(0).toUpperCase() || 'U'}
+            </div>
+          </div>
         </header>
 
         <main className="flex-1 p-4 md:p-6 overflow-auto">
