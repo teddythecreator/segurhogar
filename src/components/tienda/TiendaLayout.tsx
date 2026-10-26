@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import { Header } from './Header';
 import { Footer } from './Footer';
+import { ShopAssistantWidget } from './ShopAssistantWidget';
 
 export function TiendaLayout() {
   return (
@@ -10,6 +11,8 @@ export function TiendaLayout() {
         <Outlet />
       </main>
       <Footer />
+      {/* Widget de asistente IA flotante */}
+      <ShopAssistantWidget />
     </div>
   );
 }

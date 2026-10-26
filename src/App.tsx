@@ -12,6 +12,8 @@ import { PaymentCancelledPage } from '@/pages/tienda/PaymentCancelledPage';
 import { PacksPage } from '@/pages/tienda/PacksPage';
 import { ZoneCheckerPage } from '@/pages/tienda/ZoneCheckerPage';
 import { MyAccountPage } from '@/pages/tienda/MyAccountPage';
+import { ShopAssistantWidget } from '@/components/tienda/ShopAssistantWidget';
+import { AiAssistantPage } from '@/pages/panel/AiAssistantPage';
 import { LoginPage } from '@/pages/auth/LoginPage';
 import { RegisterPage } from '@/pages/auth/RegisterPage';
 import { RecoverPasswordPage } from '@/pages/auth/RecoverPasswordPage';
@@ -261,6 +263,16 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={['admin']}>
                 <UsersPage />
+              </ProtectedRoute>
+            } 
+          />
+
+          {/* Asistente IA (admin y gestor) */}
+          <Route 
+            path="asistente-ia" 
+            element={
+              <ProtectedRoute allowedRoles={['admin', 'gestor']}>
+                <AiAssistantPage />
               </ProtectedRoute>
             } 
           />

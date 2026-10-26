@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { SpecsEditor } from '@/components/panel/products/SpecsEditor';
 import { PackItemsSelector } from '@/components/panel/products/PackItemsSelector';
 import { ImageUploader } from '@/components/panel/products/ImageUploader';
+import { GenerateDescriptionButton } from '@/components/panel/products/GenerateDescriptionButton';
 import { useCreateProduct, useUpdateProduct, useUpdateProductImages, useUpdatePackItems, useProduct } from '@/hooks/useProducts';
 import { useCategories } from '@/hooks/useCategories';
 import { generateSlug } from '@/lib/slug';
@@ -186,59 +187,74 @@ export function ProductForm({ productId }: ProductFormProps) {
         </div>
       </div>
 
-      {/* Información básica */}
-      <Card>
-        <CardHeader>
-          <h2 className="font-semibold text-[#0B1F3A]">Información básica</h2>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <Input
-            label="Nombre del producto"
-            error={errors.nombre?.message}
-            {...register('nombre')}
-          />
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Slug
-            </label>
-            <div className="flex gap-2">
+          {/* Información básica */}
+          <Card>
+            <CardHeader>
+              <h2 className="font-semibold text-[#0B1F3A]">Información básica</h2>
+            </CardHeader>
+            <CardContent className="space-y-4">
               <Input
-                {...register('slug')}
-                error={errors.slug?.message}
-                disabled={!autoSlug}
+                label="Nombre del producto"
+                error={errors.nombre?.message}
+                {...register('nombre')}
               />
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => setAutoSlug(!autoSlug)}
-              >
-                {autoSlug ? 'Auto' : 'Manual'}
-              </Button>
-            </div>
-            <p className="text-xs text-gray-500 mt-1">
-              URL amigable del producto (ej: camara-wifi-1080p)
-            </p>
-          </div>
 
-          <Input
-            label="Descripción corta"
-            error={errors.descripcion_corta?.message}
-            {...register('descripcion_corta')}
-          />
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Slug
+                </label>
+                <div className="flex gap-2">
+                  <Input
+                    {...register('slug')}
+                    error={errors.slug?.message}
+                    disabled={!autoSlug}
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setAutoSlug(!autoSlug)}
+                  >
+                    {autoSlug ? 'Auto' : 'Manual'}
+                  </Button>
+                </div>
+                <p className="text-xs text-gray-500 mt-1">
+                  URL amigable del producto (ej: camara-wifi-1080p)
+                </p>
+              </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Descripción completa
-            </label>
-            <textarea
-              {...register('descripcion_completa')}
-              rows={4}
-              className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#2D7FF9]"
-            />
-          </div>
+              <Input
+                label="Descripción corta"
+                error={errors.descripcion_corta?.message}
+                {...register('descripcion_corta')}
+              />
 
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Descripción completa
+                  </label>
+                  <GenerateDescriptionButton
+                    productName={watch('nombre') || ''}
+                    productData={{
+                      tipo: watch('tipo'),
+                      precio: watch('precio'),
+                      categoria: categories?.find((c) => c.id === watch('categoria_id'))?.nombre,
+                    }}
+                    onGenerated={(description: string, specs: Record<string, any>) => {
+                      setValue('descripcion_completa', description);
+                      if (Object.keys(specs).length > 0) {
+                        setValue('especificaciones', specs);
+                      }
+                    }}
+                  />
+                </div>
+                <textarea
+                  {...register('descripcion_completa')}
+                  rows={4}
+                  className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#2D7FF9]"
+                />
+              </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">

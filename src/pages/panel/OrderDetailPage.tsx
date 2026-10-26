@@ -9,6 +9,7 @@ import { useOrder, useUpdateOrderStatus, useUpdateOrderNotes, useReportIncident,
 import { formatPrice, formatDateTime } from '@/lib/utils';
 import { ORDER_STATUS_LABELS } from '@/types/database';
 import type { OrderStatus } from '@/types/database';
+import { GenerateEmailButton } from '@/components/panel/orders/GenerateEmailButton';
 
 export function OrderDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -371,6 +372,23 @@ export function OrderDetailPage() {
               >
                 Guardar notas
               </Button>
+            </CardContent>
+          </Card>
+
+          {/* Redactar email con IA */}
+          <Card>
+            <CardHeader>
+              <h2 className="font-semibold text-[#0B1F3A]">Comunicación</h2>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <GenerateEmailButton
+                orderStatus={order.estado}
+                orderData={{
+                  numero: order.numero,
+                  cliente: order.envio_nombre || order.user?.nombre,
+                  total: order.total,
+                }}
+              />
             </CardContent>
           </Card>
 

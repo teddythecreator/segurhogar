@@ -9,7 +9,8 @@ import {
   Link2, 
   BarChart3, 
   Settings,
-  UserCog
+  UserCog,
+  MessageSquare
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
@@ -82,6 +83,12 @@ const menuItems: MenuItem[] = [
     label: 'Usuarios',
     icon: UserCog,
     roles: ['admin'],
+  },
+  {
+    href: '/panel/asistente-ia',
+    label: 'Asistente IA',
+    icon: MessageSquare,
+    roles: ['admin', 'gestor'],
   },
   {
     href: '/panel/ajustes',
