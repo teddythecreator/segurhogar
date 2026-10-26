@@ -1,15 +1,15 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { User, Role } from '@/types';
+import type { Profile, UserRole } from '@/types/database';
 
 interface AuthState {
-  user: User | null;
+  user: Profile | null;
   isLoading: boolean;
   isAuthenticated: boolean;
-  setUser: (user: User | null) => void;
+  setUser: (user: Profile | null) => void;
   setLoading: (loading: boolean) => void;
   logout: () => void;
-  hasRole: (role: Role) => boolean;
+  hasRole: (role: UserRole) => boolean;
   isAdmin: () => boolean;
 }
 

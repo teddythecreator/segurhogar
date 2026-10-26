@@ -1,6 +1,11 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { CartItem, Product } from '@/types';
+import type { Product } from '@/types/database';
+
+export interface CartItem {
+  producto: Product;
+  cantidad: number;
+}
 
 interface CartState {
   items: CartItem[];
@@ -10,7 +15,6 @@ interface CartState {
   clearCart: () => void;
   getTotalItems: () => number;
   getTotalPrice: () => number;
-  isDropshippingOnly: () => boolean;
 }
 
 export const useCartStore = create<CartState>()(
@@ -65,10 +69,6 @@ export const useCartStore = create<CartState>()(
           const price = item.producto.precio_rebajado ?? item.producto.precio;
           return total + price * item.cantidad;
         }, 0);
-      },
-
-      isDropshippingOnly: () => {
-        return get().items.every((item) => item.producto.tipo === 'dropshipping');
       },
     }),
     {

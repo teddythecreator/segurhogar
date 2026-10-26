@@ -21,9 +21,9 @@ export function LoginPage() {
 
     // Simulación de login (en producción se usará Supabase Auth)
     setTimeout(() => {
-      const demoUsers: Record<string, { nombre: string; role: 'admin' | 'gestor_pedidos' | 'instalador' }> = {
+      const demoUsers: Record<string, { nombre: string; role: 'admin' | 'gestor' | 'instalador' }> = {
         'admin@segurhogar.es': { nombre: 'Admin SegurHogar', role: 'admin' },
-        'gestor@segurhogar.es': { nombre: 'Gestor Pedidos', role: 'gestor_pedidos' },
+        'gestor@segurhogar.es': { nombre: 'Gestor Pedidos', role: 'gestor' },
         'instalador@segurhogar.es': { nombre: 'Técnico Instalador', role: 'instalador' },
       };
 
@@ -34,7 +34,10 @@ export function LoginPage() {
           email,
           nombre: demoUser.nombre,
           role: demoUser.role,
-          creado_en: new Date().toISOString(),
+          telefono: null,
+          avatar_url: null,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
         });
         navigate('/panel');
       } else {
