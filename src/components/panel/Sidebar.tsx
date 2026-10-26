@@ -48,6 +48,12 @@ const menuItems: MenuItem[] = [
     roles: ['admin'],
   },
   {
+    href: '/panel/categorias',
+    label: 'Categorías',
+    icon: ShoppingBag,
+    roles: ['admin'],
+  },
+  {
     href: '/panel/clientes',
     label: 'Clientes',
     icon: Users,

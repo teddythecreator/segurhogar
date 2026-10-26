@@ -16,6 +16,9 @@ import { MyAgendaPage } from '@/pages/panel/MyAgendaPage';
 import { OrdersPage } from '@/pages/panel/OrdersPage';
 import { InstallationsPage } from '@/pages/panel/InstallationsPage';
 import { ProductsPage } from '@/pages/panel/ProductsPage';
+import { ProductNewPage } from '@/pages/panel/ProductNewPage';
+import { ProductEditPage } from '@/pages/panel/ProductEditPage';
+import { CategoriesPage } from '@/pages/panel/CategoriesPage';
 import { CustomersPage } from '@/pages/panel/CustomersPage';
 import { QuotesPage } from '@/pages/panel/QuotesPage';
 import { AffiliatePage } from '@/pages/panel/AffiliatePage';
@@ -145,6 +148,32 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={['admin']}>
                 <ProductsPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="productos/nuevo" 
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <ProductNewPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="productos/:id" 
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <ProductEditPage />
+              </ProtectedRoute>
+            } 
+          />
+          
+          {/* Categorías (solo admin) */}
+          <Route 
+            path="categorias" 
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <CategoriesPage />
               </ProtectedRoute>
             } 
           />
