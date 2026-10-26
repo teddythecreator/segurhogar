@@ -110,7 +110,10 @@ export function ProductCard({ product }: ProductCardProps) {
               className="w-full"
               onClick={(e) => {
                 e.preventDefault();
-                addItem(product);
+                const result = addItem(product);
+                if (!result.success && result.error) {
+                  alert(result.error);
+                }
               }}
             >
               <ShoppingCart className="mr-1 h-3.5 w-3.5" />

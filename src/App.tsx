@@ -6,6 +6,9 @@ import { HomePage } from '@/pages/tienda/HomePage';
 import { CatalogPage } from '@/pages/tienda/CatalogPage';
 import { ProductPage } from '@/pages/tienda/ProductPage';
 import { CartPage } from '@/pages/tienda/CartPage';
+import { CheckoutPage } from '@/pages/tienda/CheckoutPage';
+import { PaymentSuccessPage } from '@/pages/tienda/PaymentSuccessPage';
+import { PaymentCancelledPage } from '@/pages/tienda/PaymentCancelledPage';
 import { PacksPage } from '@/pages/tienda/PacksPage';
 import { ZoneCheckerPage } from '@/pages/tienda/ZoneCheckerPage';
 import { MyAccountPage } from '@/pages/tienda/MyAccountPage';
@@ -76,6 +79,9 @@ function App() {
           <Route path="/packs" element={<PacksPage />} />
           <Route path="/comprobar-zona" element={<ZoneCheckerPage />} />
           <Route path="/carrito" element={<CartPage />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/pago-exitoso" element={<PaymentSuccessPage />} />
+          <Route path="/pago-cancelado" element={<PaymentCancelledPage />} />
 
           {/* Mi cuenta (solo clientes) */}
           <Route

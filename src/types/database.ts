@@ -159,6 +159,7 @@ export interface Order {
   factura_ciudad: string | null;
   factura_provincia: string | null;
   // Pagos
+  stripe_session_id: string | null;
   stripe_payment_intent_id: string | null;
   pagado_en: string | null;
   // Notas
