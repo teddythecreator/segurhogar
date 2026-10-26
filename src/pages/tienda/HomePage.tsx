@@ -9,8 +9,16 @@ import { Card, CardContent } from '@/components/ui/Card';
 import { Accordion } from '@/components/ui/Accordion';
 import { ProductCard } from '@/components/tienda/product/ProductCard';
 import { useFeaturedPacks } from '@/hooks/usePublicProducts';
+import { useSEO, DEFAULT_SEO } from '@/hooks/useSEO';
+import { OrganizationStructuredData } from '@/components/seo/StructuredData';
 
 export function HomePage() {
+  useSEO({
+    title: DEFAULT_SEO.title,
+    description: DEFAULT_SEO.description,
+    keywords: DEFAULT_SEO.keywords,
+    canonical: 'https://[DOMINIO_WEB]/',
+  });
   const { data: featuredPacks } = useFeaturedPacks(3);
 
   const faqItems = [
@@ -48,6 +56,9 @@ export function HomePage() {
 
   return (
     <div>
+      {/* Datos estructurados para SEO */}
+      <OrganizationStructuredData />
+      
       {/* Hero */}
       <section className="bg-gradient-to-br from-[#0B1F3A] via-[#0f2847] to-[#152d4f] text-white py-16 md:py-24 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">

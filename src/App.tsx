@@ -14,6 +14,12 @@ import { ZoneCheckerPage } from '@/pages/tienda/ZoneCheckerPage';
 import { MyAccountPage } from '@/pages/tienda/MyAccountPage';
 import { ShopAssistantWidget } from '@/components/tienda/ShopAssistantWidget';
 import { AiAssistantPage } from '@/pages/panel/AiAssistantPage';
+import { AvisoLegalPage } from '@/components/tienda/legal/AvisoLegalPage';
+import { PrivacidadPage } from '@/components/tienda/legal/PrivacidadPage';
+import { CookiesPage } from '@/components/tienda/legal/CookiesPage';
+import { CondicionesVentaPage } from '@/components/tienda/legal/CondicionesVentaPage';
+import { DevolucionesPage } from '@/components/tienda/legal/DevolucionesPage';
+import { GarantiaPage } from '@/components/tienda/legal/GarantiaPage';
 import { LoginPage } from '@/pages/auth/LoginPage';
 import { RegisterPage } from '@/pages/auth/RegisterPage';
 import { RecoverPasswordPage } from '@/pages/auth/RecoverPasswordPage';
@@ -89,6 +95,14 @@ function App() {
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/pago-exitoso" element={<PaymentSuccessPage />} />
           <Route path="/pago-cancelado" element={<PaymentCancelledPage />} />
+
+          {/* Páginas legales */}
+          <Route path="/aviso-legal" element={<AvisoLegalPage />} />
+          <Route path="/privacidad" element={<PrivacidadPage />} />
+          <Route path="/cookies" element={<CookiesPage />} />
+          <Route path="/condiciones-venta" element={<CondicionesVentaPage />} />
+          <Route path="/devoluciones" element={<DevolucionesPage />} />
+          <Route path="/garantia" element={<GarantiaPage />} />
 
           {/* Mi cuenta (solo clientes) */}
           <Route

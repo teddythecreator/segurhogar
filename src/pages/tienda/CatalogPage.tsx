@@ -6,10 +6,19 @@ import { ProductCard } from '@/components/tienda/product/ProductCard';
 import { usePublicProducts } from '@/hooks/usePublicProducts';
 import { useCategories } from '@/hooks/useCategories';
 import { PRODUCT_TYPE_LABELS } from '@/types/database';
+import { useSEO } from '@/hooks/useSEO';
 import type { ProductType, RecommendedProfile } from '@/types/database';
 
 export function CatalogPage() {
   const [searchParams, setSearchParams] = useSearchParams();
+
+  useSEO({
+    title: 'Catálogo de productos de seguridad - SegurHogar',
+    description:
+      'Explora nuestro catálogo de productos de seguridad física y digital. Cámaras, alarmas, cerraduras inteligentes, VPN y más. Envío a toda España.',
+    keywords: 'catálogo seguridad, productos seguridad, cámaras, alarmas, cerraduras',
+    canonical: 'https://[DOMINIO_WEB]/catalogo',
+  });
   
   // Leer filtros de la URL
   const search = searchParams.get('search') || '';

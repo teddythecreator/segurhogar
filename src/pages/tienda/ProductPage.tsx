@@ -14,12 +14,24 @@ import { useCartStore } from '@/stores/cart-store';
 import { useTrackAffiliateClick } from '@/hooks/useAffiliate';
 import { formatPrice } from '@/lib/utils';
 import { PRODUCT_TYPE_LABELS } from '@/types/database';
+import { useSEO } from '@/hooks/useSEO';
+import { ProductStructuredData, BreadcrumbStructuredData } from '@/components/seo/StructuredData';
 
 export function ProductPage() {
   const { slug } = useParams<{ slug: string }>();
   const { data: product, isLoading } = usePublicProduct(slug || null);
   const addItem = useCartStore((s) => s.addItem);
   const trackClick = useTrackAffiliateClick();
+
+  // SEO para el producto
+  useSEO({
+    title: product ? `${product.nombre} - SegurHogar` : 'Producto - SegurHogar',
+    description: product?.descripcion_corta || 'Producto de seguridad de SegurHogar',
+    keywords: product ? `${product.nombre}, ${product.categoria?.nombre || 'seguridad'}` : '',
+    ogImage: product?.imagenes?.[0]?.url,
+    ogType: 'product',
+    canonical: product ? `https://[DOMINIO_WEB]/producto/${product.slug}` : undefined,
+  });
   
   const [addInstallation, setAddInstallation] = useState(false);
   const [activeTab, setActiveTab] = useState<'descripcion' | 'especificaciones' | 'envio'>('descripcion');
@@ -77,6 +89,24 @@ export function ProductPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
+      {/* Datos estructurados para SEO */}
+      <BreadcrumbStructuredData
+        items={[
+          { name: 'Inicio', url: '/' },
+          { name: 'Catálogo', url: '/catalogo' },
+          ...(product?.categoria ? [{ name: product.categoria.nombre, url: `/catalogo?categoria=${product.categoria.slug}` }] : []),
+          { name: product.nombre, url: `/producto/${product.slug}` },
+        ]}
+      />
+      <ProductStructuredData
+        name={product.nombre}
+        description={product.descripcion_corta || product.descripcion_completa || ''}
+        image={product.imagenes?.map((img) => img.url) || []}
+        sku={product.slug}
+        price={product.precio_rebajado ?? product.precio}
+        availability={product.stock > 0 ? 'InStock' : 'OutOfStock'}
+      />
+
       {/* Breadcrumb */}
       <Link to="/catalogo" className="inline-flex items-center text-sm text-gray-500 hover:text-[#2D7FF9] mb-6">
         <ArrowLeft className="h-4 w-4 mr-1" />

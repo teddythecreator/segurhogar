@@ -60,8 +60,32 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-white/10 mt-8 pt-8 text-center text-sm text-gray-500">
-          <p>© {new Date().getFullYear()} SegurHogar. Todos los derechos reservados.</p>
+        {/* Enlaces legales */}
+        <div className="border-t border-white/10 mt-8 pt-8">
+          <div className="flex flex-wrap justify-center gap-4 text-xs text-gray-400">
+            <Link to="/aviso-legal" className="hover:text-white transition-colors">
+              Aviso Legal
+            </Link>
+            <Link to="/privacidad" className="hover:text-white transition-colors">
+              Política de Privacidad
+            </Link>
+            <Link to="/cookies" className="hover:text-white transition-colors">
+              Cookies
+            </Link>
+            <Link to="/condiciones-venta" className="hover:text-white transition-colors">
+              Condiciones de Venta
+            </Link>
+            <Link to="/devoluciones" className="hover:text-white transition-colors">
+              Devoluciones
+            </Link>
+            <Link to="/garantia" className="hover:text-white transition-colors">
+              Garantía
+            </Link>
+          </div>
+        </div>
+
+        <div className="border-t border-white/10 mt-4 pt-8 text-center text-sm text-gray-500">
+          <p>© {new Date().getFullYear()} [NOMBRE_EMPRESA]. Todos los derechos reservados.</p>
         </div>
       </div>
     </footer>

@@ -2,6 +2,7 @@ import { Outlet } from 'react-router-dom';
 import { Header } from './Header';
 import { Footer } from './Footer';
 import { ShopAssistantWidget } from './ShopAssistantWidget';
+import { CookieBanner } from './CookieBanner';
 
 export function TiendaLayout() {
   return (
@@ -13,6 +14,8 @@ export function TiendaLayout() {
       <Footer />
       {/* Widget de asistente IA flotante */}
       <ShopAssistantWidget />
+      {/* Banner de cookies */}
+      <CookieBanner />
     </div>
   );
 }
