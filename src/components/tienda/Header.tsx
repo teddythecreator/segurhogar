@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ShoppingCart, Menu, X, Shield } from 'lucide-react';
+import { ShoppingCart, Menu, X, Shield, LogOut, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useCartStore } from '@/stores/cart-store';
+import { useAuth } from '@/hooks/useAuth';
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
   const totalItems = useCartStore((s) => s.getTotalItems());
+  const { isAuthenticated, user, signOut } = useAuth();
 
   const navLinks = [
     { href: '/', label: 'Inicio' },
@@ -54,9 +56,28 @@ export function Header() {
               )}
             </Link>
 
-            <Link to="/login" className="hidden md:inline-flex text-sm font-medium text-gray-300 hover:text-white transition-colors">
-              Acceder
-            </Link>
+            {isAuthenticated ? (
+              <div className="hidden md:flex items-center gap-3">
+                <Link
+                  to={user?.role === 'cliente' ? '/mi-cuenta' : '/panel'}
+                  className="flex items-center gap-2 text-sm font-medium text-gray-300 hover:text-white transition-colors"
+                >
+                  <User className="h-4 w-4" />
+                  {user?.nombre || 'Mi cuenta'}
+                </Link>
+                <button
+                  onClick={signOut}
+                  className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                  title="Cerrar sesión"
+                >
+                  <LogOut className="h-4 w-4" />
+                </button>
+              </div>
+            ) : (
+              <Link to="/login" className="hidden md:inline-flex text-sm font-medium text-gray-300 hover:text-white transition-colors">
+                Acceder
+              </Link>
+            )}
 
             {/* Mobile menu button */}
             <button
@@ -88,13 +109,34 @@ export function Header() {
                   {link.label}
                 </Link>
               ))}
-              <Link
-                to="/login"
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 rounded-lg text-sm font-medium text-gray-300 hover:bg-white/10"
-              >
-                Acceder
-              </Link>
+              {isAuthenticated ? (
+                <>
+                  <Link
+                    to={user?.role === 'cliente' ? '/mi-cuenta' : '/panel'}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="px-3 py-2 rounded-lg text-sm font-medium text-gray-300 hover:bg-white/10"
+                  >
+                    Mi cuenta
+                  </Link>
+                  <button
+                    onClick={() => {
+                      signOut();
+                      setMobileMenuOpen(false);
+                    }}
+                    className="px-3 py-2 rounded-lg text-sm font-medium text-red-400 hover:bg-white/10 text-left"
+                  >
+                    Cerrar sesión
+                  </button>
+                </>
+              ) : (
+                <Link
+                  to="/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="px-3 py-2 rounded-lg text-sm font-medium text-gray-300 hover:bg-white/10"
+                >
+                  Acceder
+                </Link>
+              )}
             </div>
           </nav>
         )}

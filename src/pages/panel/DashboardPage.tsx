@@ -1,9 +1,9 @@
 import { Card, CardContent } from '@/components/ui/Card';
-import { useAuthStore } from '@/stores/auth-store';
+import { useAuth } from '@/hooks/useAuth';
 import { Package, Calendar, Users, TrendingUp } from 'lucide-react';
 
 export function DashboardPage() {
-  const user = useAuthStore((s) => s.user);
+  const { user } = useAuth();
 
   const stats = [
     { label: 'Pedidos hoy', value: '—', icon: Package, color: 'text-[#2D7FF9]' },
